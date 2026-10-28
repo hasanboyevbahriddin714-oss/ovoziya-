@@ -1,409 +1,350 @@
 <!DOCTYPE html>
 <html lang="uz" class="h-full">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ovoziya - Audio Kitoblar Platformasi</title>
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Google Fonts Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script>
-tailwind.config = {
-theme: {
-extend: {
-fontFamily: {
-sans: ['Inter', 'sans-serif'],
-},
-colors: {
-brand: {
-50: '#f0fdf4',
-100: '#dcfce7',
-500: '#22c55e',
-600: '#16a34a',
-700: '#15803d',
-800: '#166534',
-900: '#14532d',
-}
-}
-}
-}
-}
-</script>
-<style>
-@keyframes wave {
-0%, 100% { height: 8px; }
-50% { height: 28px; }
-}
-.animate-wave-1 { animation: wave 1.2s infinite ease-in-out; }
-.animate-wave-2 { animation: wave 1.2s infinite ease-in-out 0.2s; }
-.animate-wave-3 { animation: wave 1.2s infinite ease-in-out 0.4s; }
-.animate-wave-4 { animation: wave 1.2s infinite ease-in-out 0.1s; }
-.animate-wave-5 { animation: wave 1.2s infinite ease-in-out 0.3s; }
-.wave-paused * {
-animation-play-state: paused !important;
-height: 8px !important;
-}
-::-webkit-scrollbar {
-width: 6px;
-}
-::-webkit-scrollbar-track {
-background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-background: #cbd5e1;
-border-radius: 4px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ovoziya - Audio Kitoblar Platformasi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-full flex flex-col pb-20 sm:pb-0">
-<!-- ================= HEADER ================= -->
-<header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex items-center justify-between h-20 gap-4">
-<!-- Logo -->
-<div class="flex items-center space-x-3 shrink-0">
-<div class="w-11 h-11 bg-gradient-to-tr from-brand-600 to-emerald-400 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
-<i class="fa-solid fa-headphones text-xl"></i>
-</div>
-<div>
-<span class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-Ovoziya
-</span>
-<span class="block text-[10px] font-bold text-brand-600 uppercase tracking-wider">AUDIO KITOBLAR</span>
-</div>
-</div>
-<!-- Desktop Qidiruv -->
-<div class="hidden md:flex flex-1 max-w-md mx-4">
-<div class="relative w-full">
-<i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-<input 
-type="text" 
-id="searchInput" 
-placeholder="Kitob nomi yoki muallif qidirish..." 
-class="w-full pl-11 pr-10 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-sm font-medium focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200"
-oninput="handleSearch(this.value)"
->
-<button id="clearSearch" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
-<i class="fa-solid fa-xmark text-sm"></i>
-</button>
-</div>
-</div>
-<!-- O'ng tarafdagi menyu tugmalari -->
-<div class="flex items-center space-x-2 sm:space-x-3">
-<!-- Mobile Qidiruv Tugmasi -->
-<button onclick="toggleMobileSearch()" class="md:hidden p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors">
-<i class="fa-solid fa-magnifying-glass text-lg"></i>
-</button>
-<!-- Statistika Tugmasi 📊 -->
-<button 
-onclick="openStatsModal()" 
-class="p-2.5 text-slate-600 hover:text-brand-600 hover:bg-brand-50 rounded-full transition-colors"
-title="Statistika"
->
-<i class="fa-solid fa-chart-simple text-lg"></i>
-</button>
-<!-- Sevimlilar Tugmasi -->
-<button 
-onclick="openFavoritesModal()" 
-class="relative flex items-center space-x-2 bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-100 px-3.5 py-2 rounded-full font-semibold text-sm transition-all duration-200 active:scale-95"
-title="Sevimlilar"
->
-<i class="fa-solid fa-heart text-base text-rose-500"></i>
-<span id="favCountBadge" class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
-0
-</span>
-</button>
-<!-- Yuklanganlar Tugmasi 📥 -->
-<button 
-onclick="openDownloadsModal()" 
-class="p-2.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors relative"
-title="Yuklab olinganlar"
->
-<i class="fa-solid fa-download text-lg"></i>
-<span id="downloadCountBadge" class="hidden absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">0</span>
-</button>
-<!-- Profil Tugmasi 👤 -->
-<button 
-onclick="openProfileModal()" 
-class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-700 font-bold transition-colors overflow-hidden"
-title="Profil"
->
-<i class="fa-solid fa-user text-slate-600"></i>
-</button>
-</div>
-</div>
-<!-- Mobile Qidiruv Satri -->
-<div id="mobileSearchContainer" class="hidden md:hidden pb-4 pt-1 border-t border-slate-100">
-<div class="relative w-full">
-<i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-<input 
-type="text" 
-id="mobileSearchInput" 
-placeholder="Kitob yoki muallif qidirish..." 
-class="w-full pl-11 pr-10 py-2.5 bg-slate-100 border border-transparent rounded-full text-sm font-medium focus:outline-none focus:bg-white focus:border-brand-500"
-oninput="handleSearch(this.value)"
->
-</div>
-</div>
-</div>
-</header>
-<!-- ================= ASOSIY MAZMUN ================= -->
-<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-<!-- HERO / AUDIO INTRO SECTION -->
-<section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950 rounded-3xl text-white p-6 sm:p-8 shadow-xl border border-slate-700/50">
-<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-<div class="space-y-3 text-center md:text-left max-w-xl">
-<div class="inline-flex items-center space-x-2 bg-brand-500/20 text-brand-300 border border-brand-500/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
-<i class="fa-solid fa-sparkles"></i>
-<span>Kirish Audiosi</span>
-</div>
-<h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-Xush kelibsiz! Bahriddin loyihasiga marhamat!
-</h1>
-<p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-14 ta audio kitobdan iborat sara kutubxonamizdan bahramand bo'ling. Kitoblarni yuklab olib, oflayn rejimda ham tinglashingiz mumkin.
-</p>
-</div>
-<!-- Audio Player Card -->
-<div class="w-full md:w-auto min-w-[280px] sm:min-w-[320px] bg-white/10 backdrop-blur-md border border-white/15 p-4 rounded-2xl flex flex-col items-center justify-center space-y-3 shadow-xl">
-<div class="flex items-center space-x-3 w-full">
-<div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white shrink-0 shadow-md">
-<i class="fa-solid fa-volume-high text-lg"></i>
-</div>
-<div class="overflow-hidden text-left flex-1">
-<h4 class="font-bold text-sm text-white truncate">Salomlashuv Audiosi</h4>
-<p class="text-xs text-brand-300 truncate">Saodat / Bahriddin</p>
-</div>
-</div>
-<!-- Visualizer -->
-<div id="introWave" class="flex items-center justify-center space-x-1.5 h-6 w-full wave-paused">
-<span class="w-1.5 bg-brand-400 rounded-full animate-wave-1"></span>
-<span class="w-1.5 bg-brand-400 rounded-full animate-wave-2"></span>
-<span class="w-1.5 bg-brand-400 rounded-full animate-wave-3"></span>
-<span class="w-1.5 bg-brand-400 rounded-full animate-wave-4"></span>
-<span class="w-1.5 bg-brand-400 rounded-full animate-wave-5"></span>
-</div>
-<div class="flex items-center space-x-2 w-full">
-<button 
-id="introPlayBtn"
-onclick="toggleIntroAudio()"
-class="flex-1 flex items-center justify-center space-x-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2 px-4 rounded-xl text-sm transition-all duration-200 active:scale-95 shadow-md shadow-brand-500/20"
->
-<i id="introPlayIcon" class="fa-solid fa-play"></i>
-<span id="introPlayText">Tinglash</span>
-</button>
-<a 
-href="saodat-preview (2).wav" 
-download="Salomlashuv.wav"
-class="p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
-title="Yuklab olish"
->
-<i class="fa-solid fa-download"></i>
-</a>
-</div>
-<audio id="introAudio" src="saodat-preview (2).wav" preload="metadata"></audio>
-</div>
-</div>
-</section>
-<!-- KATALOG BO'LIMI -->
-<section id="catalog" class="space-y-6">
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-<div>
-<h2 class="text-xl font-bold text-slate-900">Audio Kutubxona</h2>
-<p class="text-xs text-slate-500">Mavjud 14 ta audio hikoya va kitoblar</p>
-</div>
-<!-- Filterlar -->
-<div class="flex items-center space-x-2 overflow-x-auto pb-2 sm:pb-0">
-<button onclick="filterCategory('all')" class="cat-btn active px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-600 text-white shadow-sm transition-all">Barchasi</button>
-<button onclick="filterCategory('hikoya')" class="cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all">Hikoyalar</button>
-<button onclick="filterCategory('roman')" class="cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all">Romanlar</button>
-<button onclick="filterCategory('biznes')" class="cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all">Rivojlanish</button>
-</div>
-</div>
-<!-- Topilmadi holati -->
-<div id="noResults" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-100">
-<i class="fa-solid fa-magnifying-glass text-3xl text-slate-300 mb-3 block"></i>
-<h3 class="text-base font-bold text-slate-800">Kitob topilmadi</h3>
-<p class="text-slate-500 text-xs mt-1">Boshqa nom bilan qidirib ko'ring</p>
-</div>
-<!-- Kitoblar setkasi -->
-<div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-<!-- JS orqali 14 ta kitob yuklanadi -->
-</div>
-</section>
-</main>
-<!-- ================= MODAL: SEVIMLILAR ================= -->
-<div id="favoritesModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-<div id="favoritesContent" class="bg-white rounded-3xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl scale-95 transition-transform duration-300 overflow-hidden">
-<div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-<div class="flex items-center space-x-3">
-<div class="w-9 h-9 bg-rose-100 text-rose-500 rounded-xl flex items-center justify-center font-bold">
-<i class="fa-solid fa-heart"></i>
-</div>
-<div>
-<h3 class="text-base font-bold text-slate-800">Sevimli Kitoblar</h3>
-<p class="text-xs text-slate-500">Saqlangan audio kitoblaringiz</p>
-</div>
-</div>
-<button onclick="closeFavoritesModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<div id="favoritesList" class="p-5 overflow-y-auto space-y-3 flex-grow">
-<!-- JS rendering -->
-</div>
-<div class="p-4 border-t border-slate-100 bg-slate-50 text-right">
-<button onclick="closeFavoritesModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs transition-colors">
-Yopish
-</button>
-</div>
-</div>
-</div>
-<!-- ================= MODAL: YUKLAB OLINGANLAR 📥 ================= -->
-<div id="downloadsModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-<div id="downloadsContent" class="bg-white rounded-3xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl scale-95 transition-transform duration-300 overflow-hidden">
-<div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-<div class="flex items-center space-x-3">
-<div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">
-<i class="fa-solid fa-download"></i>
-</div>
-<div>
-<h3 class="text-base font-bold text-slate-800">Yuklab Olinganlar 📥</h3>
-<p class="text-xs text-slate-500">Oflayn eshitish uchun saqlanganlar</p>
-</div>
-</div>
-<button onclick="closeDownloadsModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<div id="downloadsList" class="p-5 overflow-y-auto space-y-3 flex-grow">
-<!-- JS rendering -->
-</div>
-<div class="p-4 border-t border-slate-100 bg-slate-50 text-right">
-<button onclick="closeDownloadsModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs transition-colors">
-Yopish
-</button>
-</div>
-</div>
-</div>
-<!-- ================= MODAL: STATISTIKA 📊 ================= -->
-<div id="statsModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-<div id="statsContent" class="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] flex flex-col shadow-2xl scale-95 transition-transform duration-300 overflow-hidden">
-<div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-<div class="flex items-center space-x-3">
-<div class="w-9 h-9 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center font-bold">
-<i class="fa-solid fa-chart-pie"></i>
-</div>
-<div>
-<h3 class="text-base font-bold text-slate-800">Eshitish Statistikasi 📊</h3>
-<p class="text-xs text-slate-500">Aktivligingiz haqida ma'lumotlar</p>
-</div>
-</div>
-<button onclick="closeStatsModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<div class="p-5 space-y-5 overflow-y-auto">
-<div class="grid grid-cols-2 gap-3">
-<div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
-<span class="text-xs text-slate-500 font-medium">Jami tinglandi</span>
-<h4 id="statTotalMinutes" class="text-xl font-extrabold text-brand-600 mt-1">128 min</h4>
-</div>
-<div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
-<span class="text-xs text-slate-500 font-medium">Eshitilgan kitoblar</span>
-<h4 id="statCompletedBooks" class="text-xl font-extrabold text-slate-800 mt-1">8 ta</h4>
-</div>
-</div>
-<div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
-<h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Haftalik Aktivlik</h4>
-<div class="flex items-end justify-between h-24 pt-4 px-2">
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-200 rounded-t-md h-8"></div>
-<span class="text-[10px] text-slate-400">Du</span>
-</div>
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-400 rounded-t-md h-14"></div>
-<span class="text-[10px] text-slate-400">Se</span>
-</div>
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-600 rounded-t-md h-20"></div>
-<span class="text-[10px] text-slate-400">Ch</span>
-</div>
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-300 rounded-t-md h-10"></div>
-<span class="text-[10px] text-slate-400">Pa</span>
-</div>
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-500 rounded-t-md h-16"></div>
-<span class="text-[10px] text-slate-400">Ju</span>
-</div>
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-200 rounded-t-md h-6"></div>
-<span class="text-[10px] text-slate-400">Sh</span>
-</div>
-<div class="flex flex-col items-center gap-1">
-<div class="w-6 bg-brand-600 rounded-t-md h-18"></div>
-<span class="text-[10px] text-slate-400">Ya</span>
-</div>
-</div>
-</div>
-</div>
-<div class="p-4 border-t border-slate-100 bg-slate-50 text-right">
-<button onclick="closeStatsModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs transition-colors">
-Yopish
-</button>
-</div>
-</div>
-</div>
-<!-- ================= MODAL: PROFIL 👤 ================= -->
-<div id="profileModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-<div id="profileContent" class="bg-white rounded-3xl max-w-sm w-full shadow-2xl scale-95 transition-transform duration-300 overflow-hidden">
-<div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-<h3 class="text-base font-bold text-slate-800">Foydalanuvchi Profili</h3>
-<button onclick="closeProfileModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<div class="p-6 text-center space-y-4">
-<div class="w-20 h-20 bg-gradient-to-tr from-brand-500 to-emerald-400 text-white rounded-full flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-brand-500/20">
-B
-</div>
-<div>
-<h4 class="text-lg font-bold text-slate-800">Bahriddin</h4>
-<p class="text-xs text-slate-500">hasanboyevbahriddin714@gmail.com</p>
-</div>
-<div class="pt-2 space-y-2 text-left text-xs">
-<div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-<span class="text-slate-600">Obuna Holati:</span>
-<span class="font-bold text-brand-600">Faol (A'zo)</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-<span class="text-slate-600">Sevimli kitoblar:</span>
-<span id="profileFavCount" class="font-bold text-slate-800">0 ta</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-<span class="text-slate-600">Yuklab olingan:</span>
-<span id="profileDownloadCount" class="font-bold text-slate-800">0 ta</span>
-</div>
-</div>
-</div>
-<div class="p-4 border-t border-slate-100 bg-slate-50 text-right">
-<button onclick="closeProfileModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs transition-colors">
-Yopish
-</button>
-</div>
-</div>
-</div>
-<!-- JAVASCRIPT KODI -->
-<script>
-// 14 ta audio kitoblar to'plami
-const books = [
-{ id: 1, title: "Xush kelibsan, kuz", author: "Ovoziya Jamol", category: "hikoya", duration: "18 min", cover: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=400", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-{ id: 2, title: "Muzlagan ko'ngil", author: "Bahriddin H.", category: "roman", duration: "42 min", cover: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=400", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-{ id: 3, title: "Muvaffaqiyatli Insonlar Odatlari", author: "Stephen Covey", category: "biznes", duration: "10 soat", cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-{ id: 4, title: "Boy Ota, Kambag'al Ota", author: "Robert Kiyosaki", category: "biznes", duration: "6 soat", cover: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=80&w=400", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-{ id: 5, title: "O'tkan Kunlar", author: "Abdulla Qodiriy", category: "roman", duration: "12 soat", cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
-{ id: 6, title: "Mehrobdan Chayon", author: "Abdulla Qodiriy", category: "roman", duration: "9 soat", cover: "https://images.unsplash.com/photo-14976
+<body class="bg-slate-50 text-slate-800 antialiased min-h-full flex flex-col justify-between">
+
+    <!-- Header (Navigatsiya) -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-headphones text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base leading-tight">Ovoziya</h1>
+                    <span class="text-[10px] tracking-wider text-slate-400 font-semibold uppercase">Audio Kitoblar</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <!-- Qidiruv tugmasi -->
+                <button id="searchToggle" class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </button>
+                <!-- Statistika tugmasi -->
+                <button id="statToggle" class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition" title="Statistika">
+                    <i class="fa-solid fa-chart-simple text-sm"></i>
+                </button>
+                <!-- Sevimlilar tugmasi -->
+                <button id="favToggle" class="flex items-center space-x-1.5 bg-rose-50 text-rose-600 px-3 py-1.5 rounded-full text-xs font-semibold border border-rose-100">
+                    <i class="fa-solid fa-heart text-sm"></i>
+                    <span id="favCount">0</span>
+                </button>
+                <!-- Profil tugmasi -->
+                <button id="profileToggle" class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-user text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Qidiruv paneli (Yashirin turadi) -->
+        <div id="searchBar" class="hidden px-4 pb-3 border-t border-slate-100 pt-3 bg-white">
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Hikoya yoki kitob nomini qidiring..." class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500">
+                <i class="fa-solid fa-search absolute right-3.5 top-3 text-slate-400 text-sm"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Asosiy Kontent -->
+    <main class="max-w-md mx-auto w-full px-4 py-6 space-y-6 flex-grow">
+        
+        <!-- Salomlashuv / Kirish Audiusi bloki -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-36 h-36 bg-brand-500/10 rounded-full blur-2xl"></div>
+            <span class="inline-block px-3 py-1 bg-brand-600/30 text-brand-400 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3 border border-brand-500/20">Kirish Audiusi</span>
+            <h2 class="text-xl font-bold mb-1">Xush kelibsiz!<br>Bahriddin loyihasiga marhamat!</h2>
+            <p class="text-xs text-slate-300 mb-5 leading-relaxed">Muallif Hasanboyev Bahriddinbek tomonidan yozilgan sara hikoya va asarlardan bahramand bo'ling.</p>
+            
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 flex items-center justify-between border border-white/10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-semibold">Salomlashuv Audiusi</h4>
+                        <p class="text-[10px] text-slate-300">Saodat / Bahriddin</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="playWelcomeAudio()" class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-md">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Tinglash</span>
+                    </button>
+                    <button onclick="downloadAudio('Salomlashuv Audiusi')" class="bg-white/20 hover:bg-white/30 text-white w-8 h-8 rounded-xl flex items-center justify-center text-xs transition" title="Yuklab olish">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kutubxona Sarlavhasi -->
+        <div>
+            <div class="flex items-center justify-between mb-1">
+                <h3 class="font-bold text-lg text-slate-900">Audio Kutubxona</h3>
+                <span class="text-xs text-slate-500 font-medium">24 ta asar</span>
+            </div>
+            <p class="text-xs text-slate-400">Muallif: Hasanboyev Bahriddinbek (10-A sinf)</p>
+        </div>
+
+        <!-- Hikoyalar Ro'yxati -->
+        <div id="booksContainer" class="space-y-3">
+            
+            <!-- JavaScript orqali barcha 24 ta kitob avtomatik joylanadi -->
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-10 py-4 text-center text-xs text-slate-400">
+        <p>&copy; 2026 Bahriddin loyihasi. Barcha huquqlar himoyalangan.</p>
+        <p class="text-[10px] mt-1 text-slate-300">40-maktab, 10-A sinf o'quvchisi</p>
+    </footer>
+
+    <!-- STATISTIKA MODALI -->
+    <div id="statModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto animate-in">
+            <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-chart-simple text-brand-500"></i> Tinglash Statistikasi
+                </h3>
+                <button id="closeStatModal" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-brand-50 p-4 rounded-2xl border border-brand-100">
+                        <span class="text-xs text-brand-600 font-semibold block">Eshitilgan vaqt</span>
+                        <span class="text-xl font-bold text-brand-700 mt-1 block">4 soat 20 min</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <span class="text-xs text-slate-500 font-semibold block">Tugatilgan kitoblar</span>
+                        <span class="text-xl font-bold text-slate-800 mt-1 block">12 ta</span>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <h4 class="text-xs font-bold text-slate-700 mb-2">Haftalik faollik</h4>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex justify-between items-center"><span class="text-slate-500">Dushanba</span><span class="font-semibold">45 min</span></div>
+                        <div class="flex justify-between items-center"><span class="text-slate-500">Seshanba</span><span class="font-semibold">1 soat 10 min</span></div>
+                        <div class="flex justify-between items-center"><span class="text-slate-500">Chorshanba</span><span class="font-semibold">30 min</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEVIMLILAR MODALI -->
+    <div id="favModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-base flex items-center gap-2 text-rose-600">
+                    <i class="fa-solid fa-heart"></i> Sevimli Kitoblar
+                </h3>
+                <button id="closeFavModal" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="favListContainer" class="space-y-2">
+                <p class="text-xs text-slate-400 text-center py-6">Hozircha sevimlilar ro'yxati bo'sh.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFIL MODALI -->
+    <div id="profileModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto text-center">
+            <div class="flex justify-end mb-2">
+                <button id="closeProfileModal" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="w-20 h-20 bg-brand-500 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-3 shadow-lg shadow-brand-500/30">
+                HB
+            </div>
+            <h3 class="font-bold text-lg text-slate-900">Hasanboyev Bahriddinbek</h3>
+            <p class="text-xs text-brand-600 font-semibold mt-0.5">Muallif & Platforma Yaratuvchisi</p>
+            
+            <div class="bg-slate-50 rounded-2xl p-4 mt-5 text-left space-y-2 border border-slate-100 text-xs">
+                <div class="flex justify-between"><span class="text-slate-400">Yosh:</span><span class="font-semibold text-slate-700">16 yosh</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Maktab:</span><span class="font-semibold text-slate-700">40-maktab</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Sinf:</span><span class="font-semibold text-slate-700">10-A sinf</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Asarlar soni:</span><span class="font-semibold text-slate-700">24 ta</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT QISMI -->
+    <script>
+        // Barcha 24 ta kitoblar massivi
+        const books = [
+            "Muallif haqida qisqacha maʼlumot",
+            "Hush kelibsan kuz",
+            "Muzlagan koʻngil",
+            "Uzilgan rishtalar",
+            "Soʻnggi yozgi kecha",
+            "Oʻsha damlar",
+            "Yozdagi soʻnggi uchrashuv",
+            "Yoʻqolgan xazina kundaligi",
+            "Qiyofadosh Doʻstim bilan birgalikda oʻtgan kunlarim",
+            "Yulduzli tushlar va vaqt",
+            "Bobom bilan o'tgan kunlar",
+            "ÕLIMDAN 2-YIl avval seni uchradim",
+            "Unitilgan muhabat",
+            "Vaqt girdobobi",
+            "Sirli maktub",
+            "Maktabdagi birinchi muhabbat",
+            "Yozdagi soʻnggi uchrashuv",
+            "Otamning vasiyatlari",
+            "Soʻngi xato",
+            "Taqdir sinovlari",
+            "Unutilmas tushim",
+            "Peyezddagi soʻnggi bekat",
+            "Muzlatilgan orzular",
+            "Qalbimdagi xavf-xatarlar"
+        ];
+
+        let favorites = [];
+
+        // Kitoblarni chiqarish
+        const booksContainer = document.getElementById('booksContainer');
+
+        function renderBooks(list) {
+            booksContainer.innerHTML = "";
+            list.forEach((title, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between hover:border-brand-500/50 transition book-item";
+                card.setAttribute('data-title', title.toLowerCase());
+                
+                const isFav = favorites.includes(title);
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 overflow-hidden pr-2">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center text-brand-600 font-bold text-xs">
+                            ${index + 1}
+                        </div>
+                        <div class="truncate">
+                            <h4 class="text-xs font-bold text-slate-800 truncate">${title}</h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5">Hasanboyev Bahriddinbek</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1 flex-shrink-0">
+                        <button onclick="toggleFav('${title.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500 flex items-center justify-center transition">
+                            <i class="${isFav ? 'fa-solid text-rose-500' : 'fa-regular'} fa-heart text-xs"></i>
+                        </button>
+                        <button onclick="downloadAudio('${title.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition" title="Yuklab olish">
+                            <i class="fa-solid fa-download text-xs"></i>
+                        </button>
+                        <button onclick="playBook('${title.replace(/'/g, "\\'")}')" class="bg-brand-500 hover:bg-brand-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm">
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                            <span class="hidden sm:inline">Tinglash</span>
+                        </button>
+                    </div>
+                `;
+                booksContainer.appendChild(card);
+            });
+        }
+
+        renderBooks(books);
+
+        // Qidiruv funksiyasi
+        const searchToggle = document.getElementById('searchToggle');
+        const searchBar = document.getElementById('searchBar');
+        const searchInput = document.getElementById('searchInput');
+
+        searchToggle.addEventListener('click', () => {
+            searchBar.classList.toggle('hidden');
+            if(!searchBar.classList.contains('hidden')) {
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = books.filter(b => b.toLowerCase().includes(term));
+            renderBooks(filtered);
+        });
+
+        // Modal boshqaruvlari
+        const statModal = document.getElementById('statModal');
+        document.getElementById('statToggle').addEventListener('click', () => statModal.classList.remove('hidden'));
+        document.getElementById('closeStatModal').addEventListener('click', () => statModal.classList.add('hidden'));
+
+        const profileModal = document.getElementById('profileModal');
+        document.getElementById('profileToggle').addEventListener('click', () => profileModal.classList.remove('hidden'));
+        document.getElementById('closeProfileModal').addEventListener('click', () => profileModal.classList.add('hidden'));
+
+        const favModal = document.getElementById('favModal');
+        document.getElementById('favToggle').addEventListener('click', () => {
+            updateFavModal();
+            favModal.classList.remove('hidden');
+        });
+        document.getElementById('closeFavModal').addEventListener('click', () => favModal.classList.add('hidden'));
+
+        // Sevimlilarga qo'shish
+        function toggleFav(title) {
+            if (favorites.includes(title)) {
+                favorites = favorites.filter(t => t !== title);
+            } else {
+                favorites.push(title);
+            }
+            document.getElementById('favCount').textContent = favorites.length;
+            renderBooks(books);
+        }
+
+        function updateFavModal() {
+            const container = document.getElementById('favListContainer');
+            if (favorites.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">Hozircha sevimlilar ro\'yxati bo\'sh.</p>';
+            } else {
+                container.innerHTML = favorites.map(t => `<div class="bg-slate-50 p-2.5 rounded-xl text-xs font-medium text-slate-700 flex items-center justify-between"><span>📖 ${t}</span><button onclick="toggleFav('${t.replace(/'/g, "\\'")}')" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash-can"></i></button></div>`).join('');
+            }
+        }
+
+        function playWelcomeAudio() {
+            alert("Salomlashuv audiosi ijro etilmoqda...");
+        }
+
+        function playBook(title) {
+            alert(`"${title}" asari tinglashga tayyorlanmoqda...`);
+        }
+
+        function downloadAudio(title) {
+            alert(`"${title}" qurilmaga yuklab olinmoqda...`);
+        }
+    </script>
+</body>
+                  </html>                                                                                                                     
