@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+< <!DOCTYPE html>
 <html lang="uz" class="h-full">
 <head>
     <meta charset="UTF-8">
@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <!-- Qidiruv paneli (Yashirin turadi) -->
+        <!-- Qidiruv paneli -->
         <div id="searchBar" class="hidden px-4 pb-3 border-t border-slate-100 pt-3 bg-white">
             <div class="relative">
                 <input type="text" id="searchInput" placeholder="Hikoya yoki kitob nomini qidiring..." class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500">
@@ -83,7 +83,7 @@
         <!-- Salomlashuv / Kirish Audiusi bloki -->
         <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 w-36 h-36 bg-brand-500/10 rounded-full blur-2xl"></div>
-            <span class="inline-block px-3 py-1 bg-brand-600/30 text-brand-400 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3 border border-brand-500/20">Kirish Audiusi</span>
+            <span class="inline-block px-3 py-1 bg-brand-600/30 text-brand-400 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3 border border-brand-500/25">Kirish Audiusi</span>
             <h2 class="text-xl font-bold mb-1">Xush kelibsiz!<br>Bahriddin loyihasiga marhamat!</h2>
             <p class="text-xs text-slate-300 mb-5 leading-relaxed">Muallif Hasanboyev Bahriddinbek tomonidan yozilgan sara hikoya va asarlardan bahramand bo'ling.</p>
             
@@ -115,14 +115,12 @@
                 <h3 class="font-bold text-lg text-slate-900">Audio Kutubxona</h3>
                 <span class="text-xs text-slate-500 font-medium">24 ta asar</span>
             </div>
-            <p class="text-xs text-slate-400">Muallif: Hasanboyev Bahriddinbek (10-A sinf)</p>
+            <p class="text-xs text-slate-400">Muallif: Hasanboyev Bahriddinbek (16 yosh, 40-maktab, 10-A sinf)</p>
         </div>
 
         <!-- Hikoyalar Ro'yxati -->
         <div id="booksContainer" class="space-y-3">
-            
-            <!-- JavaScript orqali barcha 24 ta kitob avtomatik joylanadi -->
-
+            <!-- JavaScript orqali to'ldiriladi -->
         </div>
 
     </main>
@@ -133,9 +131,31 @@
         <p class="text-[10px] mt-1 text-slate-300">40-maktab, 10-A sinf o'quvchisi</p>
     </footer>
 
+    <!-- MUALLIF HAQIDA MODALI (1-band uchun maxsus) -->
+    <div id="aboutAuthorModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-base flex items-center gap-2 text-brand-700">
+                    <i class="fa-solid fa-feather"></i> Muallif haqida
+                </h3>
+                <button onclick="closeAboutModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3 text-xs text-slate-600 leading-relaxed text-left">
+                <p><strong>Ismim:</strong> Bahriddin Hasanboyev (16 yosh)</p>
+                <p><strong>Ta'lim:</strong> 40-maktab, 10-A sinf o'quvchisi.</p>
+                <p>Yosh bo'lishimga qaramay, adabiyotga, kitob o'qishga va o'z fikrlarimni qogʻozga tushirishga boʻlgan qiziqishim juda baland.</p>
+                <p><strong>Asosiy maqsadim:</strong> Ushbu hikoyani yozishdan asosiy maqsadim shunchaki vaqt oʻtkazish emas, balki oʻquvchi qalbida qandaydir iliq tuygʻu uygʻotish va hayot haqida bir lahza boʻlsa ham oʻylantirishdir. Tengdoshlarimga va kitobxonalarga ilhom berish, hayotdagi turli sinovlar, quvonch va tashvishlarni yengib o'tishda kuch topishlariga ko'maklashish — mening eng katta yutugʻim boʻladi.</p>
+                <p>İchki kechinmalarim va dunyoqarashimni ulashish, inson qalbiga nazar tashlash (yaxshilik va yomonlik, doʻstlik, sadoqat hamda insoniylik kabi oliy qadriyatlar) gʻoyalarini oʻz qahramonlarim taqdiri orqali ochib berishga harakat qildim.</p>
+                <p class="font-semibold text-slate-800 pt-2 border-t border-slate-100">Kelajakda o'quvchilar qalbidan joy oladigan yanada katta va mazmunli asarlar yozish niyatidaman!</p>
+            </div>
+        </div>
+    </div>
+
     <!-- STATISTIKA MODALI -->
     <div id="statModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto animate-in">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
                 <h3 class="font-bold text-base flex items-center gap-2">
                     <i class="fa-solid fa-chart-simple text-brand-500"></i> Tinglash Statistikasi
@@ -153,14 +173,6 @@
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                         <span class="text-xs text-slate-500 font-semibold block">Tugatilgan kitoblar</span>
                         <span class="text-xl font-bold text-slate-800 mt-1 block">12 ta</span>
-                    </div>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <h4 class="text-xs font-bold text-slate-700 mb-2">Haftalik faollik</h4>
-                    <div class="space-y-2 text-xs">
-                        <div class="flex justify-between items-center"><span class="text-slate-500">Dushanba</span><span class="font-semibold">45 min</span></div>
-                        <div class="flex justify-between items-center"><span class="text-slate-500">Seshanba</span><span class="font-semibold">1 soat 10 min</span></div>
-                        <div class="flex justify-between items-center"><span class="text-slate-500">Chorshanba</span><span class="font-semibold">30 min</span></div>
                     </div>
                 </div>
             </div>
@@ -209,7 +221,6 @@
 
     <!-- JAVASCRIPT QISMI -->
     <script>
-        // Barcha 24 ta kitoblar massivi
         const books = [
             "Muallif haqida qisqacha maʼlumot",
             "Hush kelibsan kuz",
@@ -232,29 +243,28 @@
             "Soʻngi xato",
             "Taqdir sinovlari",
             "Unutilmas tushim",
-            "Peyezddagi soʻnggi bekat",
+            "Poyezddagi soʻnggi bekat",
             "Muzlatilgan orzular",
             "Qalbimdagi xavf-xatarlar"
         ];
 
         let favorites = [];
 
-        // Kitoblarni chiqarish
         const booksContainer = document.getElementById('booksContainer');
 
         function renderBooks(list) {
             booksContainer.innerHTML = "";
             list.forEach((title, index) => {
+                const originalIndex = books.indexOf(title) + 1;
                 const card = document.createElement('div');
-                card.className = "bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between hover:border-brand-500/50 transition book-item";
-                card.setAttribute('data-title', title.toLowerCase());
+                card.className = "bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between hover:border-brand-500/50 transition";
                 
                 const isFav = favorites.includes(title);
 
                 card.innerHTML = `
                     <div class="flex items-center space-x-3 overflow-hidden pr-2">
                         <div class="w-10 h-10 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center text-brand-600 font-bold text-xs">
-                            ${index + 1}
+                            ${originalIndex}
                         </div>
                         <div class="truncate">
                             <h4 class="text-xs font-bold text-slate-800 truncate">${title}</h4>
@@ -268,9 +278,9 @@
                         <button onclick="downloadAudio('${title.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition" title="Yuklab olish">
                             <i class="fa-solid fa-download text-xs"></i>
                         </button>
-                        <button onclick="playBook('${title.replace(/'/g, "\\'")}')" class="bg-brand-500 hover:bg-brand-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm">
-                            <i class="fa-solid fa-play text-[10px]"></i>
-                            <span class="hidden sm:inline">Tinglash</span>
+                        <button onclick="handleAction(event, '${title.replace(/'/g, "\\'")}')" class="bg-brand-500 hover:bg-brand-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm">
+                            <i class="fa-solid ${originalIndex === 1 ? 'fa-book-open' : 'fa-play'} text-[10px]"></i>
+                            <span class="hidden sm:inline">${originalIndex === 1 ? 'Oʻqish' : 'Tinglash'}</span>
                         </button>
                     </div>
                 `;
@@ -279,6 +289,18 @@
         }
 
         renderBooks(books);
+
+        function handleAction(event, title) {
+            if (title === "Muallif haqida qisqacha maʼlumot") {
+                document.getElementById('aboutAuthorModal').classList.remove('hidden');
+            } else {
+                alert(`"${title}" asari tinglashga tayyorlanmoqda...`);
+            }
+        }
+
+        function closeAboutModal() {
+            document.getElementById('aboutAuthorModal').classList.add('hidden');
+        }
 
         // Qidiruv funksiyasi
         const searchToggle = document.getElementById('searchToggle');
@@ -298,7 +320,7 @@
             renderBooks(filtered);
         });
 
-        // Modal boshqaruvlari
+        // Modallar
         const statModal = document.getElementById('statModal');
         document.getElementById('statToggle').addEventListener('click', () => statModal.classList.remove('hidden'));
         document.getElementById('closeStatModal').addEventListener('click', () => statModal.classList.add('hidden'));
@@ -314,7 +336,6 @@
         });
         document.getElementById('closeFavModal').addEventListener('click', () => favModal.classList.add('hidden'));
 
-        // Sevimlilarga qo'shish
         function toggleFav(title) {
             if (favorites.includes(title)) {
                 favorites = favorites.filter(t => t !== title);
@@ -326,25 +347,4 @@
         }
 
         function updateFavModal() {
-            const container = document.getElementById('favListContainer');
-            if (favorites.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">Hozircha sevimlilar ro\'yxati bo\'sh.</p>';
-            } else {
-                container.innerHTML = favorites.map(t => `<div class="bg-slate-50 p-2.5 rounded-xl text-xs font-medium text-slate-700 flex items-center justify-between"><span>📖 ${t}</span><button onclick="toggleFav('${t.replace(/'/g, "\\'")}')" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash-can"></i></button></div>`).join('');
-            }
-        }
-
-        function playWelcomeAudio() {
-            alert("Salomlashuv audiosi ijro etilmoqda...");
-        }
-
-        function playBook(title) {
-            alert(`"${title}" asari tinglashga tayyorlanmoqda...`);
-        }
-
-        function downloadAudio(title) {
-            alert(`"${title}" qurilmaga yuklab olinmoqda...`);
-        }
-    </script>
-</body>
-                  </html>                                                                                                                     
+            const containe
