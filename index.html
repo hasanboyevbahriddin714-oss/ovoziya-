@@ -1,115 +1,105 @@
+
 <!DOCTYPE html>
-<html lang="uz" class="h-full">
+<html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ovoziya - Audio Kitoblar Platformasi</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0fdf4', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' } }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ovoziya — o‘zbekcha audiokitoblar do‘koni">
+<title>Ovoziya | Audiokitoblar</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f8f4;color:#183027;font-family:Arial,sans-serif}
+header{background:#103b2c;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:bold}
+.search{padding:12px;border:0;border-radius:25px;width:48%;max-width:350px}
+.hero{margin:18px;padding:35px 22px;border-radius:20px;color:white;background:linear-gradient(90deg,#073d2de8,#073d2d80),url('https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=1200') center/cover}
+.hero h1{font-size:34px}
+.hero p{line-height:1.6}
+.hero a{display:inline-block;background:#fff;color:#08784c;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold}
+main{padding:15px;max-width:1100px;margin:auto}
+.filters{display:flex;gap:8px;overflow:auto;margin:20px 0}
+.filters button{padding:10px 16px;border:0;border-radius:22px;background:#dcebe1;white-space:nowrap}
+.filters button.active{background:#168653;color:white}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.book{background:white;border-radius:15px;overflow:hidden;box-shadow:0 3px 12px #0001}
+.book img{width:100%;height:190px;object-fit:cover}
+.info{padding:12px}
+.info h3{font-size:16px;margin:5px 0}
+.info p{font-size:13px;color:#718078}
+.price{color:#12834e;font-weight:bold;margin:12px 0}
+.info button{background:#168653;color:white;border:0;border-radius:20px;padding:10px;width:100%}
+.about{background:#e1f1e6;padding:20px;border-radius:15px;margin-top:25px;line-height:1.7}
+footer{text-align:center;background:#103b2c;color:white;padding:25px;margin-top:30px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.book img{height:165px}.hero h1{font-size:27px}header{flex-wrap:wrap}.search{width:100%;max-width:none}}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800 h-full flex flex-col font-sans antialiased">
+<body>
+<header>
+<div class="logo">🎧 OVOZIYA</div>
+<input class="search" id="search" placeholder="🔎 Kitob qidirish...">
+</header>
 
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
-                    <i class="fa-solid fa-headphones-simple"></i>
-                </div>
-                <span class="text-xl font-bold bg-gradient-to-r from-brand-700 to-brand-500 bg-clip-text text-transparent">Ovoziya</span>
-            </div>
-            <div class="relative flex-1 max-w-md mx-4">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-                <input type="text" id="searchInput" oninput="filterBooks()" placeholder="Asar nomi yoki muallifni qidirish..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-full text-sm focus:outline-none focus:bg-white focus:border-brand-500 transition">
-            </div>
-            <div class="flex items-center space-x-3">
-                <button onclick="openFavorites()" class="relative p-2 text-gray-600 hover:text-brand-600 transition">
-                    <i class="fa-solid fa-heart text-xl"></i>
-                    <span id="favCount" class="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
+<section class="hero">
+<h1>Ovoziya audiokitoblar olami!</h1>
+<p>Eng sara hikoyalar va qiziqarli asarlar endi bir joyda. Mutolaa olamiga xush kelibsiz!</p>
+<a href="#kitoblar">Kitoblarni ko‘rish</a>
+</section>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28">
-        
-        <!-- Hero Banner -->
-        <div class="relative bg-gradient-to-r from-emerald-800 to-brand-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 overflow-hidden">
-            <div class="relative z-10 max-w-xl">
-                <span class="bg-white/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Yangi mavsum</span>
-                <h1 class="text-2xl sm:text-4xl font-extrabold mt-3 mb-2">Eng sara o'zbekcha audio kitoblar</h1>
-                <p class="text-emerald-100 text-sm sm:text-base mb-6">Sevimli asarlaringizni istalgan joyda, istalgan vaqtda tinglang.</p>
-            </div>
-        </div>
+<main id="kitoblar">
+<h2>📚 Bizning kutubxona</h2>
+<div class="filters" id="filters">
+<button class="active" data-cat="Barchasi">Barchasi</button>
+<button data-cat="Hayotiy">Hayotiy</button>
+<button data-cat="Sarguzasht">Sarguzasht</button>
+<button data-cat="Drama">Drama</button>
+<button data-cat="Sirli">Sirli</button>
+</div>
+<div class="grid" id="books"></div>
+<div class="about">
+<h3>🎧 Ovoziya haqida</h3>
+Ovoziya — hikoyalar va audiokitoblar do‘koni.
+Sevimli asarlaringizni biz bilan kashf eting!
+<br><b>Boshlang‘ich narx: 5 000 so‘m.</b>
+</div>
+</main>
 
-        <!-- Genres Filter -->
-        <div class="flex items-center space-x-2 overflow-x-auto pb-4 mb-6 no-scrollbar" id="genreContainer">
-            <button onclick="filterGenre('Barchasi', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-brand-600 text-white whitespace-nowrap shadow-sm transition">Barchasi</button>
-            <button onclick="filterGenre('Drama', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Drama</button>
-            <button onclick="filterGenre('Adventure', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Sarguzasht</button>
-            <button onclick="filterGenre('Thriller', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Triller</button>
-            <button onclick="filterGenre('Family', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Oila</button>
-            <button onclick="filterGenre('Romance', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Romantika</button>
-            <button onclick="filterGenre('Sci-Fi', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Ilmiy-fantastik</button>
-            <button onclick="filterGenre('Other-world', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Boshqa olam</button>
-            <button onclick="filterGenre('Life', this)" class="genre-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-100 transition">Hayotiy</button>
-        </div>
+<footer>© 2026 OVOZIYA | Audiokitoblar do‘koni</footer>
 
-        <!-- Books Grid -->
-        <div id="booksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-            <!-- Dynamically populated -->
-        </div>
-    </main>
-
-    <!-- Persistent Audio Player Bar -->
-    <div id="audioPlayerBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl p-3 z-45 hidden">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-3 overflow-hidden">
-                <div id="playerCover" class="w-12 h-12 rounded-lg bg-brand-500 flex items-center justify-center text-white text-lg font-bold shrink-0">🎧</div>
-                <div class="truncate">
-                    <h4 id="playerTitle" class="text-sm font-bold text-gray-900 truncate">Asar nomi</h4>
-                    <p id="playerAuthor" class="text-xs text-gray-500 truncate">Muallif</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button onclick="togglePlayPause()" class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center hover:bg-brand-700 transition shadow">
-                    <i id="playPauseIcon" class="fa-solid fa-play"></i>
-                </button>
-                <button onclick="closePlayer()" class="text-gray-400 hover:text-gray-600 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-        </div>
-        <audio id="audioElement" src="saodat-preview (3).wav" onended="onAudioEnded()"></audio>
-    </div>
-
-    <script>
-        const books = [
-            { id: 1, title: "Saodat", author: "Muallif 1", genre: "Drama", duration: "04:20", cover: "🌿" },
-            { id: 2, title: "Sarguzasht izlab", author: "Muallif 2", genre: "Adventure", duration: "05:15", cover: "🗺️" },
-            { id: 3, title: "Sirli tun", author: "Muallif 3", genre: "Thriller", duration: "03:50", cover: "🌙" },
-            { id: 4, title: "Oila rishtalari", author: "Muallif 4", genre: "Family", duration: "06:10", cover: "👨‍👩‍👧‍👦" },
-            { id: 5, title: "Muhabbat qissasi", author: "Muallif 5", genre: "Romance", duration: "04:45", cover: "❤️" },
-            { id: 6, title: "Kelajak sari", author: "Muallif 6", genre: "Sci-Fi", duration: "05:30", cover: "🚀" },
-            { id: 7, title: "Sehrliiyor", author: "Muallif 7", genre: "Other-world", duration: "04:10", cover: "✨" },
-            { id: 8, title: "Hayot saboqlari", author: "Muallif 8", genre: "Life", duration: "05:00", cover: "📖" },
-            { id: 9, title: "Qismat", author: "Muallif 9", genre: "Drama", duration: "04:30", cover: "⚖️" },
-            { id: 10, title: "Dengiz sayohati", author: "Muallif 10", genre: "Adventure", duration: "06:00", cover: "⛵" },
-            { id: 11, title: "Xavfli o'yin", author: "Muallif 11", genre: "Thriller", duration: "03:40", cover: "🔥" },
-            { id: 12, title: "Mehribonim", author: "Muall
+<script>
+const books=[
+["Maqsad sari qo‘yilgan qadamlar","Hayotiy","photo-1506784983877-45594efa4cbe"],
+["Xavfli sayohat","Sarguzasht","photo-1472396961693-142e6e269027"],
+["Xush kelibsan, kuz","Drama","photo-1507371341162-763b5e419408"],
+["So‘nggi xato","Drama","photo-1516979187457-637abb4f9353"],
+["Poyezddagi so‘nggi bekat","Sirli","photo-1474487548417-781cb71495f3"],
+["Qalbimdagi xavf-xatarlar","Drama","photo-1518837695005-2083093ee35b"],
+["Muzlatilgan orzular","Sirli","photo-1517299321609-52687d1bc55a"],
+["Taqdir sinovlari","Hayotiy","photo-1470770841072-f978cf4d019e"]
+];
+let category="Barchasi";
+function render(){
+let q=document.getElementById("search").value.toLowerCase();
+let list=books.filter(b=>(category==="Barchasi"||b[1]===category)&&b[0].toLowerCase().includes(q));
+document.getElementById("books").innerHTML=list.map(b=>`
+<div class="book">
+<img loading="lazy" src="https://images.unsplash.com/${b[2]}?auto=format&fit=crop&w=600&q=80" alt="${b[0]}">
+<div class="info">
+<h3>${b[0]}</h3>
+<p>Muallif: Bahriddin</p>
+<div class="price">5 000 so‘m</div>
+<button onclick="alert('Bu audiokitobning audio fayli hali joylanmagan.')">Batafsil</button>
+</div></div>`).join("")||"<p>Kitob topilmadi.</p>";
+}
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("filters").addEventListener("click",e=>{
+if(e.target.dataset.cat){
+category=e.target.dataset.cat;
+document.querySelectorAll(".filters button").forEach(b=>b.classList.toggle("active",b===e.target));
+render();
+}});
+render();
+</script>
+</body>
+</html>
+ 
     
