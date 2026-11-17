@@ -4,28 +4,78 @@ const cors = require("cors");
 
 const app = express();
 
+// Asosiy sozlamalar
 app.use(cors());
 app.use(express.json());
 
+// Vaqtinchalik hamkorlik arizalari xotirasi
+const partnerApplications = [];
+
+// Bosh sahifa
 app.get("/", (req, res) => {
-  res.json({
-    message: "Ovoziya backend ishlayapti!",
-    status: "success"
+  res.status(200).json({
+    name: "Ovoziya",
+    message: "Ovoziya backend muvaffaqiyatli ishlayapti!",
+    status: "online"
   });
 });
 
+// Server holatini tekshirish
+app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    status: "online"
+  });
+});
+
+// Audiokitoblar
 app.get("/api/books", (req, res) => {
-  res.json([]);
-});
-
-app.post("/api/partners", (req, res) => {
   res.json({
-    message: "Hamkorlik arizasi qabul qilindi"
+    success: true,
+    books: []
   });
 });
 
+// Hamkorlik arizasi yuborish
+app.post("/api/partners", (req, res) => {
+  const { name, phone, message } = req.body;
+
+  if (!name || !phone) {
+    return res.status(400).json({
+      success: false,
+      message: "Ism va telefon raqami kerak."
+    });
+  }
+
+  const application = {
+    id: Date.now(),
+    name,
+    phone,
+    message: message || "",
+    createdAt: new Date().toISOString()
+  };
+
+  partnerApplications.push(application);
+
+  res.status(201).json({
+    success: true,
+    message: "Hamkorlik arizangiz qabul qilindi!",
+    id: application.id
+  });
+});
+
+// Noto'g'ri manzil
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Bunday sahifa topilmadi."
+  });
+});
+
+// Serverni ishga tushirish
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log("Ovoziya server ishlayapti!");
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Ovoziya server ${PORT} portida ishlayapti!`);
 });
+
